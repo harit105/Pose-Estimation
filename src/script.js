@@ -38,7 +38,7 @@ const video = document.getElementById( 'videoElement' );
     video.pause(); 
  }
 
-const texture = new THREE.VideoTexture( video );
+const texture = new THREE.VideoTexture(video);
 
 // geometry
 const geometry = new THREE.PlaneGeometry( 2, 2 / aspectRatio );
@@ -47,16 +47,34 @@ const material = new THREE.MeshBasicMaterial( {color: 0xffffff,map:texture,side:
 
 // Plane mesh
 const plane = new THREE.Mesh( geometry, material );
+
 // Adding to the scene
 
 scene.add( plane );
-// /**
-//  * Object
-//  */
-// // const geometry = new THREE.BoxGeometry(1, 1, 1)
-// // const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-// // const mesh = new THREE.Mesh(geometry, material)
-// // scene.add(mesh)
+
+
+const vertices = [];
+
+for ( let i = 0; i < 10000; i ++ ) {
+
+	const x = THREE.MathUtils.randFloatSpread( 2000 );
+	const y = THREE.MathUtils.randFloatSpread( 2000 );
+	const z = THREE.MathUtils.randFloatSpread( 2000 );
+
+	vertices.push( x, y, z );
+
+}
+
+const geometry1 = new THREE.BufferGeometry();
+geometry1.setAttribute( 'position', new THREE.Float32BufferAttribute( vertices, 3 ) );
+
+const material1 = new THREE.PointsMaterial( { color: 0x888888} );
+
+const points = new THREE.Points( geometry1, material1 );
+
+scene.add( points );
+
+
 
 
 
@@ -98,6 +116,7 @@ const sizes = {
  const controls = new OrbitControls(camera, canvas)
  controls.enableDamping = true
 
+ 
  /**
   * Renderer
   */
@@ -107,59 +126,61 @@ const sizes = {
  renderer.setSize(sizes.width, sizes.height)
  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-/**
- * Debug
- */
-// const gui = new dat.GUI({
-//     // closed: true,
-//     width: 400
-// })
-// // gui.hide()
-// 
-// gui.add(mesh, 'visible')
-// gui.add(material, 'wireframe')
 
-// gui
-//     .addColor(parameters, 'color')
-//     .onChange(() =>
-//     {
-//         material.color.set(parameters.color)
-//     })
 
-// gui.add(parameters, 'spin')
+
+
+
+
 // let rotationOn;
 // let showDots;
 // let showSkeletons;
 // let showTrajectory;
 // let pointCloudVisible;
+// let blackAndWhite;
+// let pointCloud;
+// let particlePositions;
+// let linesMesh;  // lines between keypoints
+// let linesLinks; // lines between keypoints frame
+// let time = 0;  // Use for corresponding frame in shader
+// //let blackAndWhite = true;
+// let showTrajectory = false;
+// let rotationOn = true;
 
-let pointCloud;
-let particlePositions;
-let linesMesh;  // lines between keypoints
-let linesLinks; // lines between keypoints frame
-let time = 0;  // Use for corresponding frame in shader
-//let blackAndWhite = true;
-let showTrajectory = false;
-let rotationOn = true;
 
-const effectController = {  
-    rotationOn: true,
-    showDots: true,
-    showSkeletons: true,
-    showTrajectory: true,
-    //_3D_ON: _3D_ON,
-  //  BlackAndWhite: blackAndWhite,
-   // videoOpacity:videoOpacity,
-    // depth: depth,
-  //  nextVideo: function () {},
-  //  playPause: function () {}
-};
+
+// const effectController = {  
+//     rotationOn: true,
+//     showDots: true,
+//     showSkeletons: true,
+//     showTrajectory: true,
+//     BlackAndWhite: true
+// };
 //Debug
-const gui = new dat.GUI()
-gui.add(plane.position, 'y').min(- 3).max(3).step(0.01).name('elevation')
-gui.add(effectController,"showDots").onChange( function (value){
-    pointcloud.visible = value;
-});
+// const gui = new dat.GUI()
+// gui.add(plane.position, 'y').min(- 3).max(3).step(0.01).name('elevation')
+// gui.add(effectController,"showDots").onChange( function (value){
+//     pointcloud.visible = value;
+// });
+// gui.add( effectController, "showSkeletons" ).onChange( function ( value ) {
+
+//     linesMesh.visible = value;
+
+// } );
+
+// gui.add( effectController, "showTrajectory" ).onChange( function ( value ) {
+
+//     linesLinks.visible = value;
+
+// } );
+
+// gui.add( effectController, "BlackAndWhite" ).onChange( function ( value ) {
+
+//     blackAndWhite = value;
+//     pointCloud.material.uniforms.bw.value = blackAndWhite;
+//     linesMesh.material.uniforms.bw.value  = blackAndWhite;
+
+// } );
 
 // /**
 //  * Animate
